@@ -16,3 +16,33 @@ img {
   display: block;
   max-width: 100%;
 }
+
+.flatpickr-input {
+  width: 200px;
+  height: 30px;
+  font-size: 20px;
+}
+
+.timer-btn {
+  height: 30px;
+  font-size: 20px;
+}
+
+.timer {
+  margin: 20px 0;
+  display: flex;
+  gap: 15px;
+}
+
+.field {
+  width: 60px;
+  display: inline-block;
+  text-align: center;
+}
+
+.value {
+  display: block;
+  font-size: 30px;
+  font-weight: 600;
+  color: black;
+}
