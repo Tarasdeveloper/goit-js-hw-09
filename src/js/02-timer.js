@@ -12,39 +12,43 @@ const refs = {
   valueSeconds: document.querySelector('[data-seconds]'),
 };
 
-refs.startBtn.setAttribute('disabled', true);
+let selectedDates;
+let timeWork;
 
 const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
-  onClose(selectedDates) {
-    if (selectedDates[0] < Date.now()) {
+  onClose(selectedDatesArr) {
+    selectedDates = selectedDatesArr[0];
+
+    if (selectedDates < Date.now()) {
       refs.startBtn.setAttribute('disabled', true);
       Notiflix.Notify.failure('Please choose a date in the future');
       return;
     }
 
     refs.startBtn.removeAttribute('disabled');
-
-    refs.startBtn.addEventListener('click', onClickStartBtn);
-
-    function onClickStartBtn() {
-      refs.startBtn.setAttribute('disabled', true);
-
-      const timeWork = setInterval(() => {
-        const differenceTime = selectedDates[0] - Date.now();
-        const timeComp = convertMs(differenceTime);
-        showTime(timeComp);
-        if (differenceTime < 1000) {
-          Notiflix.Notify.success('Время закончилось!');
-          clearInterval(timeWork);
-        }
-      }, 1000);
-    }
   },
 };
+
+function onClickStartBtn() {
+  refs.startBtn.setAttribute('disabled', true);
+  refs.inputData.setAttribute('disabled', true);
+
+  timeWork = setInterval(() => {
+    const differenceTime = selectedDates - Date.now();
+    const timeComp = convertMs(differenceTime);
+    showTime(timeComp);
+    if (differenceTime < 1000) {
+      Notiflix.Notify.success('Время закончилось!');
+      clearInterval(timeWork);
+      refs.startBtn.removeAttribute('disabled');
+      refs.inputData.removeAttribute('disabled');
+    }
+  }, 1000);
+}
 
 flatpickr(refs.inputData, options);
 
@@ -78,8 +82,10 @@ function showTime({ days, hours, minutes, seconds }) {
 
 console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
 console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
+console.log(convertMs(24140000)); // {days: 0, hours: 6, minutes: 42, seconds: 20}
 
 function addLeadingZero(value) {
   return String(value).padStart(2, '0');
 }
+
+refs.startBtn.addEventListener('click', onClickStartBtn);
