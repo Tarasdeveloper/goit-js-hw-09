@@ -12,6 +12,8 @@ const refs = {
   valueSeconds: document.querySelector('[data-seconds]'),
 };
 
+refs.startBtn.setAttribute('disabled', true);
+
 let selectedDates;
 let timeWork;
 
@@ -28,7 +30,6 @@ const options = {
       Notiflix.Notify.failure('Please choose a date in the future');
       return;
     }
-
     refs.startBtn.removeAttribute('disabled');
   },
 };
@@ -44,7 +45,6 @@ function onClickStartBtn() {
     if (differenceTime < 1000) {
       Notiflix.Notify.success('Время закончилось!');
       clearInterval(timeWork);
-      refs.startBtn.removeAttribute('disabled');
       refs.inputData.removeAttribute('disabled');
     }
   }, 1000);
